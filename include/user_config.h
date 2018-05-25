@@ -5,6 +5,13 @@
 extern "C" {
 #endif
 
+	struct s_fishStatus{
+		int 	setPointTemperature;
+		float 	deadBandTemperature;
+		float 	temperature;
+		bool 	autoTemperatureControl;
+		bool 	relayStatus;
+	};
 	// UART config
 	#define SERIAL_BAUD_RATE COM_SPEED_SERIAL
 

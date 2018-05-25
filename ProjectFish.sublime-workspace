@@ -1,0 +1,241 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"to",
+				"toString"
+			],
+			[
+				"adc",
+				"adc_media"
+			],
+			[
+				"adc_comp",
+				"adc_compensado"
+			],
+			[
+				"t",
+				"t_ntc"
+			],
+			[
+				"v",
+				"v_anlarm"
+			],
+			[
+				"MQTT_TOPIC_s",
+				"MQTT_TOPIC_SUBSCRIBE"
+			],
+			[
+				"MQTT",
+				"MQTT_TOPIC"
+			],
+			[
+				"en",
+				"endif"
+			],
+			[
+				"ba",
+				"v_bat"
+			],
+			[
+				"Http",
+				"HttpClient"
+			],
+			[
+				"LED_R",
+				"LED_R_Pin"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+	],
+	"file_history":
+	[
+		"/media/vinicius/Data/lgithub/node-js-getting-started/views/pages/db.ejs",
+		"/media/vinicius/Data/lgithub/node-js-getting-started/Procfile",
+		"/media/vinicius/Data/lgithub/node-js-getting-started/README.md",
+		"/media/vinicius/Data/lgithub/node-js-getting-started/package.json",
+		"/media/vinicius/Data/lgithub/node-js-getting-started/test.js",
+		"/media/vinicius/Data/lgithub/MqttClient_Hello/Makefile",
+		"/media/vinicius/Data/lgithub/MqttClient_Hello/include/ssl/cert.h",
+		"/media/vinicius/Data/lgithub/MqttClient_Hello/include/user_config.h",
+		"/media/vinicius/Data/lgithub/MqttClient_Hello/include/ssl/private_key.h",
+		"/media/vinicius/Data/lgithub/Central_ESP/app/SX127x.c",
+		"/media/vinicius/Data/lgithub/Central_ESP/app/application.cpp",
+		"/media/vinicius/Data/lgithub/Central_ESP/include/user_config.h",
+		"/media/vinicius/Data/lgithub/Central_ESP/include/SX127x_DataLink.h",
+		"/home/vinicius/Documents/CentralRasp/index.js",
+		"/media/vinicius/Data/lgithub/Central_ESP/app/SX127x_DataLink.c",
+		"/media/vinicius/Data/lgithub/Central_ESP/Makefile-user.mk",
+		"/opt/sming/samples/Basic_Blink/app/application.cpp",
+		"/dev/tty",
+		"/dev/stdout",
+		"/media/vinicius/Data/lgithub/Central_ESP/include/SX127x.h",
+		"/media/vinicius/Data/lgithub/Central_ESP/Makefile-user",
+		"/Services/DateTime/DateTime.h",
+		"/media/vinicius/Data/lgithub/Central_ESP/Makefile",
+		"/opt/sming/Sming/SmingCore/Network/HttpClient.h",
+		"/media/vinicius/Data/github/S001_CentralARM/src/main.c",
+		"/opt/sming/samples/HttpClient_ThingSpeak/app/application.cpp",
+		"/media/vinicius/Data/lgithub/AppRaks/src/app/main.ts",
+		"/opt/sming/samples/Basic_WiFi/Makefile-user.mk",
+		"/opt/sming/samples/Basic_WiFi/Makefile",
+		"/media/vinicius/Data/lgithub/AppRaks/src/pages/home/home.ts"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ProjectFish.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 208.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
