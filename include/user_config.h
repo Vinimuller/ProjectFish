@@ -4,20 +4,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-	struct s_fishStatus{
-		int 	setPointTemperature;
-		float 	deadBandTemperature;
-		float 	temperature;
-		bool 	autoTemperatureControl;
-		bool 	relayStatus;
-	};
-
-	struct s_fishConfig{
-		float temperature_a_coeficient;
-		float temperature_b_coeficient;
-		int	  sendDataInterval;
-	};
+	//User includes
+	#include <fish.h>
+	#include <mqtt.h>
 	// UART config
 	#define SERIAL_BAUD_RATE COM_SPEED_SERIAL
 
