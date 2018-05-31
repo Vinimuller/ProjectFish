@@ -12,6 +12,12 @@ extern "C" {
 		bool 	autoTemperatureControl;
 		bool 	relayStatus;
 	};
+
+	struct s_fishConfig{
+		float temperature_a_coeficient;
+		float temperature_b_coeficient;
+		int	  sendDataInterval;
+	};
 	// UART config
 	#define SERIAL_BAUD_RATE COM_SPEED_SERIAL
 

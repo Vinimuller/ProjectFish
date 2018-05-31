@@ -85,9 +85,9 @@ app/application.o: app/application.cpp include/user_config.h \
  /opt/sming/Sming/SmingCore/Clock.h \
  /opt/sming/Sming/SmingCore/../Wiring/WiringFrameworkDependencies.h \
  /opt/sming/Sming/SmingCore/SystemClock.h \
- /opt/sming/Sming/appspecific/rboot/../../Services/DateTime/DateTime.h \
- /opt/sming/Sming/appspecific/rboot/../../Services/DateTime/../../Wiring/WString.h \
- /opt/sming/Sming/appspecific/rboot/../../Wiring/WString.h \
+ /opt/sming/Sming/system/include/../../Services/DateTime/DateTime.h \
+ /opt/sming/Sming/system/include/../../Services/DateTime/../../Wiring/WString.h \
+ /opt/sming/Sming/system/include/../../Wiring/WString.h \
  /opt/sming/Sming/SmingCore/../SmingCore/Network/NtpClient.h \
  /opt/sming/Sming/SmingCore/../SmingCore/Network/UdpConnection.h \
  /opt/sming/Sming/include/../Wiring/WiringFrameworkDependencies.h \
@@ -133,12 +133,12 @@ app/application.o: app/application.cpp include/user_config.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../TcpClient.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../HttpServerConnection.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../TcpClient.h \
- /opt/sming/Sming/appspecific/rboot/../../Wiring/WHashMap.h \
+ /opt/sming/Sming/system/include/../../Wiring/WHashMap.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../../Delegate.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../HttpResource.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../HttpResponse.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../HttpCommon.h \
- /opt/sming/Sming/appspecific/rboot/../../Wiring/FILO.h \
+ /opt/sming/Sming/system/include/../../Wiring/FILO.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../WebConstants.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../URL.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../../../Wiring/WString.h \
@@ -201,8 +201,8 @@ app/application.o: app/application.cpp include/user_config.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../HttpRequestAuth.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../../TcpConnection.h \
  /opt/sming/Sming/SmingCore/Network/Http/Websocket/../HttpBodyParser.h \
- /opt/sming/Sming/appspecific/rboot/../../Services/cWebsocket/websocket.h \
- /opt/sming/Sming/appspecific/rboot/../../Services/cWebsocket/../../Wiring/FakePgmSpace.h \
+ /opt/sming/Sming/system/include/../../Services/cWebsocket/websocket.h \
+ /opt/sming/Sming/system/include/../../Services/cWebsocket/../../Wiring/FakePgmSpace.h \
  /opt/sming/Sming/third-party/rboot/../ws_parser/ws_parser.h \
  /opt/sming/Sming/SmingCore/../Services/CommandProcessing/CommandProcessingDependencies.h \
  /opt/sming/Sming/SmingCore/../Services/CommandProcessing/CommandDelegate.h \
