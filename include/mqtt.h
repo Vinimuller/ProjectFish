@@ -1,33 +1,19 @@
 #ifndef __USER_MQTT_H__
 #define __USER_MQTT_H__
 
-#include <user_config.h>
-
-#ifndef MQTT_USERNAME
+	#include <user_config.h>
+	
 	#define MQTT_USERNAME ""
 	#define MQTT_PWD ""
-#endif
 
-#ifndef MQTT_TOPIC_SUB_DATA
-	#define MQTT_TOPIC_SUB_DATA "U7886zhUcV_fish_house/data"
-#endif
+	#define MQTT_TOPIC_SUB1 		"U7886zhUcV_fish_house/config/rx"
 
-#ifndef MQTT_TOPIC_SUB_CONFIG
-	#define MQTT_TOPIC_SUB_CONFIG "U7886zhUcV_fish_house/config"
-#endif
+	#define MQTT_TOPIC_PUB1 		"U7886zhUcV_fish_house/data/fishtemp"
+	#define MQTT_TOPIC_PUB2 		"U7886zhUcV_fish_house/data/airtemp"
+	#define MQTT_TOPIC_PUB3 		"U7886zhUcV_fish_house/data/airhumidity"
+	#define MQTT_TOPIC_PUB4 		"U7886zhUcV_fish_house/config/tx"
 
-#ifndef MQTT_TOPIC_PUBLISH
-	#define MQTT_TOPIC_PUBLISH "U7886zhUcV_fish_house/data"
-#endif
-
-#ifndef MQTT_ID
-	#define MQTT_ID "ESP_vini"
-#endif
-
-// ... and/or MQTT host and port
-#ifndef MQTT_HOST
-	#define MQTT_HOST "iot.eclipse.org"
-	#define MQTT_PORT 1883
-#endif
-
+	#define MQTT_ID 				"ESP_Fish"
+	#define MQTT_HOST 				"iot.eclipse.org"
+	#define MQTT_PORT 				1883
 #endif

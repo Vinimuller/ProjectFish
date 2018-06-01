@@ -3,20 +3,17 @@
 
 MqttClient *mqtt;
 Timer procTimer;
-extern struct s_fishStatus fishStatus;
-extern struct s_fishConfig fishConfig;
 
+extern s_fishStatus fishStatus;
+extern s_fishConfig fishConfig;
+
+void onMessageDelivered(uint16_t msgId, int type);
 void onMessageReceived(String topic, String message);
 void checkMQTTDisconnect(TcpClient& client, bool flag);
-void publishMessage();
-void onMessageDelivered(uint16_t msgId, int type);
-extern void updateFishData();
 
 // Run MQTT client
 void startMqttClient()
 {
-	procTimer.stop();
-
 	mqtt = new MqttClient(MQTT_HOST, MQTT_PORT, onMessageReceived);
 
 	if(!mqtt->setWill("last/will","The connection from this device is lost:(", 1, true)) {
@@ -26,70 +23,67 @@ void startMqttClient()
 
 	// Assign a disconnect callback function
 	mqtt->setCompleteDelegate(checkMQTTDisconnect);
-	mqtt->subscribe(MQTT_TOPIC_SUB_DATA );
-	mqtt->subscribe(MQTT_TOPIC_SUB_CONFIG );
-
-	procTimer.initializeMs(fishConfig.sendDataInterval * 1000, publishMessage).start(); 
+	mqtt->subscribe(MQTT_TOPIC_SUB1);
 }
 
 // Callback for messages, arrived from MQTT server
 void onMessageReceived(String topic, String message)
 {
-	if(topic == MQTT_TOPIC_SUB_DATA)
-	{
 		String tempStr;
 		StaticJsonBuffer<500> jsonBuffer;
 		JsonObject& root = jsonBuffer.parseObject(message);
-
+		/*
 		fishStatus.setPointTemperature		= root["setPointTemperature"];
 		fishStatus.deadBandTemperature 		= root["deadBandTemperature"];		
 		fishStatus.temperature 				= root["temperature"];
 		fishStatus.autoTemperatureControl 	= root["autoTemperatureControl"];
 		fishStatus.relayStatus 				= root["relayStatus"];
+		*/
+
 
 		root.printTo(tempStr);
 		Serial.print("Message received at topic " + topic + ": " + tempStr + "\n\n");	
-	}
-
-	if(topic == MQTT_TOPIC_SUB_CONFIG)
-	{
-		String tempStr;
-		StaticJsonBuffer<500> jsonBuffer;
-		JsonObject& root = jsonBuffer.parseObject(message);
-
-		fishConfig.temperature_a_coeficient		= root["temperature_a_coeficient"];
-		fishConfig.temperature_b_coeficient 	= root["temperature_b_coeficient"];
-		fishConfig.sendDataInterval				= root["sendDataInterval"];		
-
-		root.printTo(tempStr);
-		Serial.print("Message received at topic " + topic + ": " + tempStr + "\n\n");	
-
-		procTimer.stop();
-		procTimer.initializeMs(fishConfig.sendDataInterval * 1000, publishMessage).start(); // every 20 seconds
-	}
+	
 }
 
 // Publish our message
 void publishMessage()
 {
 	DynamicJsonBuffer jsonBuffer;
-	JsonObject& root = jsonBuffer.createObject();
+	JsonObject& root1 = jsonBuffer.createObject();
+	JsonObject& root2 = jsonBuffer.createObject();
+	JsonObject& root3 = jsonBuffer.createObject();
+	JsonObject& root4 = jsonBuffer.createObject();
+
+	root1["fishTemperature"]		= fishStatus.temperature;
 	
-	updateFishData();
-
-	root["setPointTemperature"]		= fishStatus.setPointTemperature;
-	root["deadBandTemperature"]		= fishStatus.deadBandTemperature;
-	root["temperature"]				= fishStatus.temperature;
-	root["autoTemperatureControl"]	= fishStatus.autoTemperatureControl;
-	root["relayStatus"]				= fishStatus.relayStatus;
-
-	String tempStr;
-	root.printTo(tempStr);
+	root2["airTemperature"]			= fishStatus.airTemperature;
+	
+	root3["airHumidity"]			= fishStatus.airHumidity;
+	
+	root4["setPointTemperature"]		= fishConfig.setPointTemperature;
+	root4["upperDeadBandTemperature"]	= fishConfig.upperDeadBandTemperature;
+	root4["lowerDeadBandTemperature"]	= fishConfig.lowerDeadBandTemperature;
+	root4["temperature_a_coeficient"]	= fishConfig.temperature_a_coeficient;
+	root4["temperature_b_coeficient"]	= fishConfig.temperature_b_coeficient;
+	root4["autoTemperatureControl"]		= fishConfig.autoTemperatureControl;
+	root4["relayStatus"]				= fishConfig.relayStatus;
+	root4["sendDataInterval"]			= fishConfig.sendDataInterval;
+	root4["leds"]						= fishConfig.leds;
+	
+	String fishTempStr, airTempStr, airHumStr, configStr;
+	root1.printTo(fishTempStr);
+	root2.printTo(airTempStr);
+	root3.printTo(airHumStr);
+	root4.printTo(configStr);
 
 	if (mqtt->getConnectionState() != eTCS_Connected)
 		startMqttClient(); // Auto reconnect
 
-	mqtt->publishWithQoS(MQTT_TOPIC_PUBLISH,tempStr,1,false,onMessageDelivered); 
+	mqtt->publishWithQoS(MQTT_TOPIC_PUB1,fishTempStr,1,false,onMessageDelivered); 
+	mqtt->publishWithQoS(MQTT_TOPIC_PUB2,airTempStr,1,false,onMessageDelivered); 
+	mqtt->publishWithQoS(MQTT_TOPIC_PUB3,airHumStr,1,false,onMessageDelivered); 
+	mqtt->publishWithQoS(MQTT_TOPIC_PUB4,configStr,1,false,onMessageDelivered); 
 }
 
 void onMessageDelivered(uint16_t msgId, int type)

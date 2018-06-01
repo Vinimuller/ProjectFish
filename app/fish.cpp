@@ -1,9 +1,8 @@
 #include <fish.h>
 #include <SmingCore/SmingCore.h>
 
-Timer loopTemperatureControlTimer;
-struct s_fishStatus fishStatus;
-struct s_fishConfig fishConfig;
+extern s_fishStatus fishStatus;
+extern s_fishConfig fishConfig;
 
 void fishInit()
 {
@@ -20,11 +19,12 @@ void fishInit()
 	fishConfig.temperature_a_coeficient = -0.078;
 	fishConfig.temperature_b_coeficient = 83.1;
 	fishConfig.sendDataInterval			= 10;
-	fishStatus.autoTemperatureControl	= true;
-	fishStatus.setPointTemperature		= 28;
-	fishStatus.deadBandTemperature		= 0.5;
-
-	loopTemperatureControlTimer.initializeMs(500, loopTemperatureControl).start();
+	fishConfig.autoTemperatureControl	= true;
+	fishConfig.setPointTemperature		= 28;
+	fishConfig.upperDeadBandTemperature	= 0.5;
+	fishConfig.lowerDeadBandTemperature = 1;
+	fishConfig.relayStatus				= false;
+	fishConfig.leds						= true;
 }
 
 //Get value from ADC and transform into Celsius
@@ -34,40 +34,36 @@ float getTemperature()
 
 	adc = analogRead(A0);	
 
-	return fishConfig.temperature_a_coeficient*adc + fishConfig.temperature_b_coeficient;
+	return (fishConfig.temperature_a_coeficient*adc + fishConfig.temperature_b_coeficient);
 }
 
 //Get sensors data
 void updateFishData()
 {
-	fishStatus.temperature 			= getTemperature();
-	fishStatus.relayStatus			= digitalRead(RELAY_PIN); 
+	fishStatus.temperature 		= getTemperature();
+	fishConfig.relayStatus		= digitalRead(RELAY_PIN); 
 }
 
 //Main loop for temperature control
 void loopTemperatureControl()
 {
-	updateFishData();
-
-	if(fishStatus.autoTemperatureControl)
+	if(fishConfig.autoTemperatureControl)
 	{
-		/*
-		Serial.print("Set Point Temp: ");
-		Serial.print(fishStatus.setPointTemperature);
-		Serial.print("\nTemperature: ");	
-		Serial.print(fishStatus.temperature);	
-		Serial.print("\n\n");
-		*/
-		if(fishStatus.temperature > (fishStatus.setPointTemperature + fishStatus.deadBandTemperature))
+		if(fishStatus.temperature > (fishConfig.setPointTemperature + fishConfig.upperDeadBandTemperature))
 		{	
 			digitalWrite(RELAY_PIN,LOW);		
-		}else if(fishStatus.temperature < (fishStatus.setPointTemperature - fishStatus.deadBandTemperature))
+		}else if(fishStatus.temperature < (fishConfig.setPointTemperature - fishConfig.lowerDeadBandTemperature))
 		{
 			digitalWrite(RELAY_PIN,HIGH);		
 		}
 
 	}else
 	{
-		digitalWrite(RELAY_PIN,fishStatus.relayStatus);
+		digitalWrite(RELAY_PIN,fishConfig.relayStatus);
+	}
+
+	if(fishConfig.leds)
+	{
+		digitalWrite(LED_R_PIN,fishConfig.relayStatus);
 	}
 }

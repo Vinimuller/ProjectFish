@@ -3,29 +3,29 @@
 
 #include <user_config.h>
 
-#define RELAY_PIN	15
+#define RELAY_PIN	2
 #define LED_R_PIN	15
 #define LED_G_PIN	12 
 #define LED_B_PIN	13
 
-struct s_fishStatus{
-	int 	setPointTemperature;
-	float 	deadBandTemperature;
+struct s_fishStatus
+{
 	float 	temperature;
+	float 	airTemperature;
+	float 	airHumidity;
+};
+
+struct s_fishConfig
+{
+	int 	setPointTemperature;
+	float 	upperDeadBandTemperature;
+	float 	lowerDeadBandTemperature;
+	float 	temperature_a_coeficient;
+	float 	temperature_b_coeficient;
 	bool 	autoTemperatureControl;
 	bool 	relayStatus;
+	bool	leds;
+	int	  	sendDataInterval;
 };
 
-struct s_fishConfig{
-	float temperature_a_coeficient;
-	float temperature_b_coeficient;
-	int	  sendDataInterval;
-};
-
-/*
-void fishInit();
-float getTemperature();
-void updateFishData();
-void loopTemperatureControl();
-*/
 #endif

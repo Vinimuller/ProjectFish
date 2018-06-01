@@ -1,7 +1,6 @@
 #include <user_config.h>
 #include <SmingCore/SmingCore.h>
 
-
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
 	#define WIFI_SSID "Virus.com" // Put you SSID and Password here
@@ -9,8 +8,22 @@
 #endif
 
 Timer reconnectTimer;
-void wifiConnect();
+Timer mainTimer;
+Timer pubMqttTimer;
+
+s_fishStatus fishStatus;
+s_fishConfig fishConfig;
+
 extern void startMqttClient();
+extern void fishInit();
+extern float getTemperature();
+extern void updateFishData();
+extern void loopTemperatureControl();
+
+extern void publishMessage();
+
+void wifiConnect();
+void loopSendMqttData();
 
 void listNetworks(bool succeeded, BssList list)
 {
@@ -37,35 +50,53 @@ void connectFail(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason
 	Serial.println("\n-- I'm NOT CONNECTED. Trying again --\n");
 
 	WifiStation.startScan(listNetworks); // In Sming we can start network scan from init method without additional code
-	reconnectTimer.initializeMs(5 * 1000, wifiConnect).start();
+	reconnectTimer.initializeMs(5 * 1000, wifiConnect).startOnce();
 }
 
 void gotIP(IPAddress ip, IPAddress netmask, IPAddress gateway)
 {
-	// Run MQTT client
-
 	Serial.println("-- WIFI CONNECTED. --");
 	Serial.println("Fish's IP: " + ip.toString());
+	
 	startMqttClient();
+	pubMqttTimer.initializeMs(fishConfig.sendDataInterval * 1000, sendMqttDataLoop).start();
 }
 
 void wifiConnect()
 {
-	reconnectTimer.stop();
-
 	WifiStation.config(WIFI_SSID, WIFI_PWD);
 	WifiStation.enable(true);
 	WifiAccessPoint.enable(false);
 
-	// Run our method when station was connected to AP (or not connected)
 	WifiEvents.onStationDisconnect(connectFail);
 	WifiEvents.onStationGotIP(gotIP);
 }
 
+void sendMqttDataLoop()
+{
+	if(fishConfig.leds)
+	{
+		digitalWrite(LED_G_PIN,HIGH);
+	}
+
+	publishMessage();
+
+	digitalWrite(LED_G_PIN,LOW);
+}
+
+void mainLoop()
+{
+	updateFishData();
+	loopTemperatureControl();
+}
 
 void ready()
 {
 	debugf("\n------ PROGRAM STARTED ------!\n");
+
+	fishInit();
+	
+	mainTimer.initializeMs(10 * 1000, mainLoop).start();
 
 	wifiConnect();
 }
