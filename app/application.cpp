@@ -3,8 +3,8 @@
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
-	#define WIFI_SSID "Virus.com" // Put you SSID and Password here
-	#define WIFI_PWD "Um2tres4cinco"
+	#define WIFI_SSID "raks" // Put you SSID and Password here
+	#define WIFI_PWD "13092017"
 #endif
 
 Timer reconnectTimer;
@@ -23,7 +23,7 @@ extern void loopTemperatureControl();
 extern void publishMessage();
 
 void wifiConnect();
-void loopSendMqttData();
+void sendMqttDataLoop();
 
 void listNetworks(bool succeeded, BssList list)
 {
@@ -60,10 +60,17 @@ void gotIP(IPAddress ip, IPAddress netmask, IPAddress gateway)
 	
 	startMqttClient();
 	pubMqttTimer.initializeMs(fishConfig.sendDataInterval * 1000, sendMqttDataLoop).start();
+
+	digitalWrite(LED_G_PIN,LOW);
 }
 
 void wifiConnect()
 {
+	if(fishConfig.leds)
+	{
+		digitalWrite(LED_G_PIN,HIGH);
+	}
+
 	WifiStation.config(WIFI_SSID, WIFI_PWD);
 	WifiStation.enable(true);
 	WifiAccessPoint.enable(false);
@@ -77,6 +84,11 @@ void sendMqttDataLoop()
 	if(fishConfig.leds)
 	{
 		digitalWrite(LED_G_PIN,HIGH);
+	}
+
+	if(!WifiStation.isConnected())
+	{
+		wifiConnect();
 	}
 
 	publishMessage();
@@ -95,7 +107,9 @@ void ready()
 	debugf("\n------ PROGRAM STARTED ------!\n");
 
 	fishInit();
-	
+	updateFishData();
+	loopTemperatureControl();
+
 	mainTimer.initializeMs(10 * 1000, mainLoop).start();
 
 	wifiConnect();

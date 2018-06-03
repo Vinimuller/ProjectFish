@@ -29,21 +29,22 @@ void startMqttClient()
 // Callback for messages, arrived from MQTT server
 void onMessageReceived(String topic, String message)
 {
-		String tempStr;
-		StaticJsonBuffer<500> jsonBuffer;
-		JsonObject& root = jsonBuffer.parseObject(message);
-		/*
-		fishStatus.setPointTemperature		= root["setPointTemperature"];
-		fishStatus.deadBandTemperature 		= root["deadBandTemperature"];		
-		fishStatus.temperature 				= root["temperature"];
-		fishStatus.autoTemperatureControl 	= root["autoTemperatureControl"];
-		fishStatus.relayStatus 				= root["relayStatus"];
-		*/
-
-
-		root.printTo(tempStr);
-		Serial.print("Message received at topic " + topic + ": " + tempStr + "\n\n");	
+	String tempStr;
+	StaticJsonBuffer<500> jsonBuffer;
+	JsonObject& root = jsonBuffer.parseObject(message);
 	
+	fishConfig.setPointTemperature			= root["setPointTemperature"];
+	fishConfig.upperDeadBandTemperature		= root["upperDeadBandTemperature"];
+	fishConfig.lowerDeadBandTemperature		= root["lowerDeadBandTemperature"];
+	fishConfig.temperature_a_coeficient		= root["temperature_a_coeficient"];
+	fishConfig.temperature_b_coeficient		= root["temperature_b_coeficient"];
+	fishConfig.autoTemperatureControl		= root["autoTemperatureControl"];
+	fishConfig.relayStatus					= root["relayStatus"];
+	fishConfig.sendDataInterval				= root["sendDataInterval"];
+	fishConfig.leds							= root["leds"];
+	
+	root.printTo(tempStr);
+	Serial.print("Message received at topic " + topic + ": " + tempStr + "\n\n");	
 }
 
 // Publish our message
@@ -94,7 +95,6 @@ void onMessageDelivered(uint16_t msgId, int type)
 // Check for MQTT Disconnection
 void checkMQTTDisconnect(TcpClient& client, bool flag)
 {
-	
 	// Called whenever MQTT connection is failed.
 	if (flag == true)
 		Serial.println("MQTT Broker Disconnected!!\n\n");
@@ -102,5 +102,5 @@ void checkMQTTDisconnect(TcpClient& client, bool flag)
 		Serial.println("MQTT Broker Unreachable!!\n\n");
 	
 	// Restart connection attempt after few seconds
-	procTimer.initializeMs(2 * 1000, startMqttClient).start(); // every 2 seconds
+	procTimer.initializeMs(5 * 1000, startMqttClient).start(); // every 2 seconds
 }

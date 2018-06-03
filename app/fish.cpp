@@ -30,9 +30,13 @@ void fishInit()
 //Get value from ADC and transform into Celsius
 float getTemperature()
 {
-	int adc = 0;
-
-	adc = analogRead(A0);	
+	int adc = 0, i = 0;
+	
+	for (i = 0; i < 100; i++)
+	{
+		adc += analogRead(A0);	
+	}
+	adc /= 100;
 
 	return (fishConfig.temperature_a_coeficient*adc + fishConfig.temperature_b_coeficient);
 }
@@ -42,6 +46,13 @@ void updateFishData()
 {
 	fishStatus.temperature 		= getTemperature();
 	fishConfig.relayStatus		= digitalRead(RELAY_PIN); 
+
+	if(!fishConfig.leds)
+	{
+		digitalWrite(LED_R_PIN,LOW);
+		digitalWrite(LED_G_PIN,LOW);
+		digitalWrite(LED_B_PIN,LOW);
+	}
 }
 
 //Main loop for temperature control
@@ -64,6 +75,6 @@ void loopTemperatureControl()
 
 	if(fishConfig.leds)
 	{
-		digitalWrite(LED_R_PIN,fishConfig.relayStatus);
+		digitalWrite(LED_B_PIN,fishConfig.relayStatus);
 	}
 }
