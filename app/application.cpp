@@ -3,8 +3,8 @@
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
-	#define WIFI_SSID "raks" // Put you SSID and Password here
-	#define WIFI_PWD "13092017"
+	#define WIFI_SSID "LUISA 2018" // Put you SSID and Password here
+	#define WIFI_PWD "carlsagan"
 #endif
 
 Timer reconnectTimer;
@@ -19,6 +19,7 @@ extern void fishInit();
 extern float getTemperature();
 extern void updateFishData();
 extern void loopTemperatureControl();
+extern void loadDefaultsFish();
 
 extern void publishMessage();
 
@@ -98,6 +99,11 @@ void sendMqttDataLoop()
 
 void mainLoop()
 {
+	if(!WifiStation.isConnected())
+	{
+		loadDefaultsFish();
+	}
+
 	updateFishData();
 	loopTemperatureControl();
 }
@@ -107,8 +113,6 @@ void ready()
 	debugf("\n------ PROGRAM STARTED ------!\n");
 
 	fishInit();
-	updateFishData();
-	loopTemperatureControl();
 
 	mainTimer.initializeMs(10 * 1000, mainLoop).start();
 

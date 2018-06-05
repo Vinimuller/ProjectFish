@@ -4,6 +4,22 @@
 extern s_fishStatus fishStatus;
 extern s_fishConfig fishConfig;
 
+void loopTemperatureControl();
+void updateFishData();
+
+void loadDefaultsFish()
+{
+	fishConfig.temperature_a_coeficient = -0.078;
+	fishConfig.temperature_b_coeficient = 83.1;
+	fishConfig.sendDataInterval			= 10;
+	fishConfig.autoTemperatureControl	= true;
+	fishConfig.setPointTemperature		= 28;
+	fishConfig.upperDeadBandTemperature	= 1;
+	fishConfig.lowerDeadBandTemperature = 1;
+	fishConfig.relayStatus				= false;
+	fishConfig.leds						= true;
+}
+
 void fishInit()
 {
 	pinMode(LED_R_PIN, OUTPUT);
@@ -16,15 +32,10 @@ void fishInit()
 	digitalWrite(LED_B_PIN,LOW);
 	digitalWrite(RELAY_PIN,HIGH);
 
-	fishConfig.temperature_a_coeficient = -0.078;
-	fishConfig.temperature_b_coeficient = 83.1;
-	fishConfig.sendDataInterval			= 10;
-	fishConfig.autoTemperatureControl	= true;
-	fishConfig.setPointTemperature		= 28;
-	fishConfig.upperDeadBandTemperature	= 0.5;
-	fishConfig.lowerDeadBandTemperature = 1;
-	fishConfig.relayStatus				= false;
-	fishConfig.leds						= true;
+	loadDefaultsFish();
+
+	updateFishData();
+	loopTemperatureControl();
 }
 
 //Get value from ADC and transform into Celsius
