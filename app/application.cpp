@@ -3,8 +3,8 @@
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
-	#define WIFI_SSID "LUISA 2018" // Put you SSID and Password here
-	#define WIFI_PWD "carlsagan"
+	#define WIFI_SSID "Vinicius’s iPhone" // Put you SSID and Password here
+	#define WIFI_PWD "0d6ckefpx0st0"
 #endif
 
 Timer reconnectTimer;
@@ -74,7 +74,9 @@ void wifiConnect()
 
 	WifiStation.config(WIFI_SSID, WIFI_PWD);
 	WifiStation.enable(true);
-	WifiAccessPoint.enable(false);
+	//WifiAccessPoint.enable(false);
+
+	debugf("wifi connect");
 
 	WifiEvents.onStationDisconnect(connectFail);
 	WifiEvents.onStationGotIP(gotIP);
@@ -102,6 +104,7 @@ void mainLoop()
 	if(!WifiStation.isConnected())
 	{
 		loadDefaultsFish();
+		wifiConnect();		
 	}
 
 	updateFishData();
@@ -123,6 +126,8 @@ void init()
 {
 	Serial.begin(SERIAL_BAUD_RATE); // 115200 by default
 	Serial.systemDebugOutput(true); // Debug output to serial
+
+	System.setCpuFrequency(eCF_160MHz);
 
 	System.onReady(ready);
 }

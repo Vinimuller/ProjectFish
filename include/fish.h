@@ -4,9 +4,9 @@
 #include <user_config.h>
 
 #define RELAY_PIN	5
-#define LED_R_PIN	15
-#define LED_G_PIN	12 
-#define LED_B_PIN	13
+#define LED_R_PIN	5
+#define LED_G_PIN	5 
+#define LED_B_PIN	5
 
 struct s_fishStatus
 {

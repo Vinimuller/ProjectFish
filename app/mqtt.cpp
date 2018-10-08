@@ -1,6 +1,7 @@
 #include <mqtt.h>
 #include <SmingCore/SmingCore.h>
 
+
 MqttClient *mqtt;
 Timer procTimer;
 
@@ -20,7 +21,7 @@ void startMqttClient()
 		debugf("Unable to set the last will and testament. Most probably there is not enough memory on the device.");
 	}
 	mqtt->connect(MQTT_ID);
-
+	
 	// Assign a disconnect callback function
 	mqtt->setCompleteDelegate(checkMQTTDisconnect);
 	mqtt->subscribe(MQTT_TOPIC_SUB1);
@@ -82,9 +83,9 @@ void publishMessage()
 		startMqttClient(); // Auto reconnect
 
 	mqtt->publishWithQoS(MQTT_TOPIC_PUB1,fishTempStr,1,false,onMessageDelivered); 
-	mqtt->publishWithQoS(MQTT_TOPIC_PUB2,airTempStr,1,false,onMessageDelivered); 
-	mqtt->publishWithQoS(MQTT_TOPIC_PUB3,airHumStr,1,false,onMessageDelivered); 
-	mqtt->publishWithQoS(MQTT_TOPIC_PUB4,configStr,1,false,onMessageDelivered); 
+	//mqtt->publishWithQoS(MQTT_TOPIC_PUB2,airTempStr,1,false,onMessageDelivered); 
+	//mqtt->publishWithQoS(MQTT_TOPIC_PUB3,airHumStr,1,false,onMessageDelivered); 
+	//mqtt->publishWithQoS(MQTT_TOPIC_PUB4,configStr,1,false,onMessageDelivered); 
 }
 
 void onMessageDelivered(uint16_t msgId, int type)
