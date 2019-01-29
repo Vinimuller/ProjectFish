@@ -103,5 +103,5 @@ void checkMQTTDisconnect(TcpClient& client, bool flag)
 		Serial.println("MQTT Broker Unreachable!!\n\n");
 	
 	// Restart connection attempt after few seconds
-	procTimer.initializeMs(5 * 1000, startMqttClient).start(); // every 2 seconds
+	procTimer.initializeMs(30 * 1000, startMqttClient).start(); // every 2 seconds
 }

@@ -3,8 +3,8 @@
 
 // If you want, you can define WiFi settings globally in Eclipse Environment Variables
 #ifndef WIFI_SSID
-	#define WIFI_SSID "raks" // Put you SSID and Password here
-	#define WIFI_PWD "13092017"
+	#define WIFI_SSID "SALAME2G" // Put you SSID and Password here
+	#define WIFI_PWD "Um2tres4cinco"
 #endif
 
 Timer reconnectTimer;
