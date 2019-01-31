@@ -42,8 +42,6 @@ struct ApplicationSettingsStorage
 			fishConfig.setPointTemperature 		= fish["setPointTemperature"];
 			fishConfig.upperDeadBandTemperature = fish["upperDeadBandTemperature"];
 			fishConfig.lowerDeadBandTemperature = fish["lowerDeadBandTemperature"];
-			fishConfig.temperature_a_coeficient = fish["temperature_a_coeficient"];
-			fishConfig.temperature_b_coeficient = fish["temperature_b_coeficient"];
 			fishConfig.autoTemperatureControl 	= fish["autoTemperatureControl"];
 			fishConfig.relayStatus				= fish["relayStatus"];
 			fishConfig.leds 					= fish["leds"];
@@ -68,8 +66,6 @@ struct ApplicationSettingsStorage
 		fish["setPointTemperature"] 	 = fishConfig.setPointTemperature;
 		fish["upperDeadBandTemperature"] = fishConfig.upperDeadBandTemperature;
 		fish["lowerDeadBandTemperature"] = fishConfig.lowerDeadBandTemperature;
-		fish["temperature_a_coeficient"] = fishConfig.temperature_a_coeficient;
-		fish["temperature_b_coeficient"] = fishConfig.temperature_b_coeficient;
 		fish["autoTemperatureControl"] 	 = fishConfig.autoTemperatureControl;
 		fish["relayStatus"] 			 = fishConfig.relayStatus;
 		fish["leds"] 					 = fishConfig.leds;

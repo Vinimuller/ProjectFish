@@ -12,7 +12,7 @@ c_dataHandler::c_dataHandler()
 {
 	Serial.println("\n=== DATA HANDLER CONSTRUCTOR ===");
 
-    taskTimer.initializeMs(TASK_INTERVAL, TimerDelegate(&c_dataHandler::mainLoop, this)).start();
+    taskTimer.initializeMs(TASK_INTERVAL_DATA, TimerDelegate(&c_dataHandler::mainLoop, this)).start();
 }
 
 c_dataHandler::~c_dataHandler()
@@ -72,16 +72,18 @@ void c_dataHandler::send(s_fishStatus &fishStatus)
 int onHttpDataSent(HttpConnection& client, bool successful)
 {
 	Serial.println("\n=== SERVER RESPONSE ===");
+
+    String response = client.getResponseString();
+
 	if (successful)
+    {
         Serial.println("Succes");
+        if(response.length() > 10)
+            digitalWrite(LED_B_PIN,0);
+    }
 	else
 		Serial.println("Failed");
-
-	String response = client.getResponseString();
     
-    if(response.length() > 10)
-        digitalWrite(LED_B_PIN,0);
-
 	Serial.println("Server response: '" + response + "'");
 	return 0;
 }

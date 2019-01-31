@@ -69,7 +69,7 @@ void c_fish::updateFishData()
     fishStatus.temperature 		= getTemperature();
 	fishConfig.relayStatus		= digitalRead(RELAY_0_PIN); 
 
-    Serial.printf("\tTemp: %f \n\r\tRelay: %d",fishStatus.temperature, fishConfig.relayStatus);
+    Serial.printf("\tTemp: %.1f \n\r\tRelay: %d",fishStatus.temperature, fishConfig.relayStatus);
 }
 
 void c_fish::loadDefaultConfig()
@@ -78,8 +78,8 @@ void c_fish::loadDefaultConfig()
 
     s_fishConfig fishConfig;
 
-    fishConfig.temperature_a_coeficient = -0.078;
-	fishConfig.temperature_b_coeficient = 83.1;
+    fishConfig.temperature_a_coeficient = -0.0794;
+	fishConfig.temperature_b_coeficient = 83.5;
 	fishConfig.sendDataInterval			= 10;
 	fishConfig.autoTemperatureControl	= true;
 	fishConfig.setPointTemperature		= 28;
@@ -108,8 +108,9 @@ float c_fish::getTemperature()
 	}
 	adc /= 100;
 
-	return adc;
-	//return (fishConfig.temperature_a_coeficient*adc + fishConfig.temperature_b_coeficient);
+	//return ((float)fishConfig.temperature_a_coeficient*(float)adc + fishConfig.temperature_b_coeficient);
+	Serial.printf("\n\tAdc: %d",adc);
+	return ((float)-0.0825*(float)adc + 86.6);
 }
 
 void c_fish::setFishConfig(s_fishConfig &fishConfig)

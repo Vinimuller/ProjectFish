@@ -15,7 +15,7 @@
 
 #define MQTT_TOPIC_SENSOR 	"channels/692056/publish/fields/field1/2PZCZLNKD7SQN4JW"
 
-#define TASK_INTERVAL 10*1000
+#define TASK_INTERVAL_DATA 30*1000
 
 class c_dataHandler{
 public:
