@@ -37,9 +37,6 @@ extern "C" {
 	// Beta boards
 	#define BOARD_ESP01		
 
-	//User includes
-	#include <fish.h>
-	#include <mqtt.h>
 #ifdef __cplusplus
 }
 #endif

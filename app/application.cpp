@@ -1,30 +1,13 @@
 #include <user_config.h>
-#include <SmingCore/SmingCore.h>
+#include <SmingCore.h>
+#include <server.h>
+#include <fish.h>
+#include <dataHandler.h>
+#include <AppSettings.h>
 
-// If you want, you can define WiFi settings globally in Eclipse Environment Variables
-#ifndef WIFI_SSID
-	#define WIFI_SSID "raks" // Put you SSID and Password here
-	#define WIFI_PWD "13092017"
-#endif
-
-Timer reconnectTimer;
-Timer mainTimer;
-Timer pubMqttTimer;
-
-s_fishStatus fishStatus;
-s_fishConfig fishConfig;
-
-extern void startMqttClient();
-extern void fishInit();
-extern float getTemperature();
-extern void updateFishData();
-extern void loopTemperatureControl();
-extern void loadDefaultsFish();
-
-extern void publishMessage();
-
-void wifiConnect();
-void sendMqttDataLoop();
+c_localServer *localServer = NULL;
+c_fish 		  *fish		   = NULL;
+c_dataHandler *dataHandler = NULL;
 
 void listNetworks(bool succeeded, BssList list)
 {
@@ -50,84 +33,65 @@ void connectFail(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason
 {
 	Serial.println("\n-- I'm NOT CONNECTED. Trying again --\n");
 
-	WifiStation.startScan(listNetworks); // In Sming we can start network scan from init method without additional code
-	reconnectTimer.initializeMs(5 * 1000, wifiConnect).startOnce();
+	WifiStation.startScan(listNetworks); 
 }
 
 void gotIP(IPAddress ip, IPAddress netmask, IPAddress gateway)
 {
 	Serial.println("-- WIFI CONNECTED. --");
 	Serial.println("Fish's IP: " + ip.toString());
-	
-	startMqttClient();
-	pubMqttTimer.initializeMs(fishConfig.sendDataInterval * 1000, sendMqttDataLoop).start();
 
-	digitalWrite(LED_G_PIN,LOW);
-}
-
-void wifiConnect()
-{
-	if(fishConfig.leds)
-	{
-		digitalWrite(LED_G_PIN,HIGH);
-	}
-
-	WifiStation.config(WIFI_SSID, WIFI_PWD);
-	WifiStation.enable(true);
-	//WifiAccessPoint.enable(false);
-
-	debugf("wifi connect");
-
-	WifiEvents.onStationDisconnect(connectFail);
-	WifiEvents.onStationGotIP(gotIP);
-}
-
-void sendMqttDataLoop()
-{
-	if(fishConfig.leds)
-	{
-		digitalWrite(LED_G_PIN,HIGH);
-	}
-
-	if(!WifiStation.isConnected())
-	{
-		wifiConnect();
-	}
-
-	publishMessage();
-
-	digitalWrite(LED_G_PIN,LOW);
-}
-
-void mainLoop()
-{
-	if(!WifiStation.isConnected())
-	{
-		loadDefaultsFish();
-		wifiConnect();		
-	}
-
-	updateFishData();
-	loopTemperatureControl();
 }
 
 void ready()
 {
 	debugf("\n------ PROGRAM STARTED ------!\n");
 
-	fishInit();
+	localServer = new c_localServer();
+	fish 		= new c_fish();
+	dataHandler = new c_dataHandler();
+	
+	//Load settings
+	AppSettings.load();
+	fish->getFishConfig(AppSettings.fishConfig);
 
-	mainTimer.initializeMs(10 * 1000, mainLoop).start();
+	//Start Access Point
+	WifiAccessPoint.enable(true);
+	WifiAccessPoint.config("Fish Peaks", "", AUTH_OPEN);
+	WifiAccessPoint.setIP(IPAddress(192,168,45,1));
 
-	wifiConnect();
+	WifiStation.enable(true);
+	WifiStation.config("raks", "13092017");
+
+	//load Settings
+	if(AppSettings.exist()) 
+	{
+		WifiStation.config(AppSettings.ssid, AppSettings.password);
+		fish->setFishConfig(AppSettings.fishConfig);
+	}
+
+	WifiStation.connect();
+
+	// Run our method when station was connected to AP (or not connected)
+	WifiEvents.onStationDisconnect(connectFail);
+	WifiEvents.onStationGotIP(gotIP);
 }
 
 void init()
 {
-	Serial.begin(SERIAL_BAUD_RATE); // 115200 by default
-	Serial.systemDebugOutput(true); // Debug output to serial
+	spiffs_mount();
+
+	//Serial config
+	Serial.begin(SERIAL_BAUD_RATE);
+	Serial.begin(115200);
+	Serial.systemDebugOutput(true); // Allow debug print to serial
+
+	//System config
+	SystemClock.setTimeZone(-3); // GMT-3
 
 	System.setCpuFrequency(eCF_160MHz);
+	Serial.print("New CPU frequency is: ");
+	Serial.println((int)System.getCpuFrequency());
 
 	System.onReady(ready);
 }
