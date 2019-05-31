@@ -13,20 +13,22 @@
 #define RELAY_1_PIN 5
 #define RELAY_2_PIN 13
 
-#define TASK_INTERVAL 10*1000
+#define TASK_INTERVAL 30*1000
 
 typedef struct s_fishStatus
 {
 	float 	temperature;
+	float 	tOn;
+	float 	tOnCnt;
 	float 	airTemperature;
 	float 	airHumidity;
+	bool	relayStatus;
 } s_fishStatus;
 
 typedef struct s_fishConfig
 {
-	int 	setPointTemperature;
-	float 	upperDeadBandTemperature;
-	float 	lowerDeadBandTemperature;
+	float 	upperTemperature;
+	float 	lowerTemperature;
 	float 	temperature_a_coeficient;
 	float 	temperature_b_coeficient;
 	bool 	autoTemperatureControl;
@@ -49,6 +51,7 @@ public:
 	void printFishConfig();
     float getTemperature();
 	s_fishStatus getFishStatus();
+	s_fishConfig getFishConfig();
 
 private:
     s_fishConfig fishConfig;

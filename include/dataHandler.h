@@ -15,7 +15,7 @@
 
 #define MQTT_TOPIC_SENSOR 	"channels/692056/publish/fields/field1/2PZCZLNKD7SQN4JW"
 
-#define TASK_INTERVAL_DATA 30*1000
+#define TASK_INTERVAL_DATA 5*1000*60
 
 class c_dataHandler{
 public:
@@ -23,9 +23,10 @@ public:
 	~c_dataHandler();
 
     
-    String mountJsonString(s_fishStatus &fishStatus);
-    void send(s_fishStatus &fishStatus);
+    String mountJsonString(s_fishStatus &fishStatus, s_fishConfig &fishConfig);
+    void send(s_fishStatus &fishStatus, s_fishConfig &fishConfig);
     void mainLoop();
+    void setSendInterval(int interval);
 
 private:    
     Timer taskTimer;

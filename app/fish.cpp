@@ -38,15 +38,24 @@ void c_fish::fishInit()
 void c_fish::loopTempControl()
 {
     Serial.println("\n=== LOOP TEMP CONTROL ===");
-
+	
+	float lastTemp = fishStatus.temperature;
+	fishStatus.tOnCnt++;
+	
     updateFishData();
+
+	if(lastTemp <= fishConfig.upperTemperature && fishStatus.temperature > fishConfig.upperTemperature)
+	{
+		fishStatus.tOn = fishStatus.tOnCnt/120;
+		fishStatus.tOnCnt = 0;
+	}
 
 	if(fishConfig.autoTemperatureControl)
 	{
-		if(fishStatus.temperature > (fishConfig.setPointTemperature + fishConfig.upperDeadBandTemperature))
+		if(fishStatus.temperature > fishConfig.upperTemperature)
 		{	
 			digitalWrite(RELAY_0_PIN,LOW);		
-		}else if(fishStatus.temperature < (fishConfig.setPointTemperature - fishConfig.lowerDeadBandTemperature))
+		}else if(fishStatus.temperature < fishConfig.lowerTemperature)
 		{
 			digitalWrite(RELAY_0_PIN,HIGH);		
 		}
@@ -59,6 +68,11 @@ void c_fish::loopTempControl()
 	if(fishConfig.leds)
 	{
 		digitalWrite(LED_B_PIN,fishConfig.relayStatus);
+	}else
+	{
+		digitalWrite(LED_R_PIN,0);
+		digitalWrite(LED_G_PIN,0);
+		digitalWrite(LED_B_PIN,0);
 	}
 }
 
@@ -67,6 +81,7 @@ void c_fish::updateFishData()
     Serial.println("\n=== UPDATE FISH DATA ===");
 
     fishStatus.temperature 		= getTemperature();
+	fishStatus.relayStatus		= digitalRead(RELAY_0_PIN); 
 	fishConfig.relayStatus		= digitalRead(RELAY_0_PIN); 
 
     Serial.printf("\tTemp: %.1f \n\r\tRelay: %d",fishStatus.temperature, fishConfig.relayStatus);
@@ -82,11 +97,11 @@ void c_fish::loadDefaultConfig()
 	fishConfig.temperature_b_coeficient = 83.5;
 	fishConfig.sendDataInterval			= 10;
 	fishConfig.autoTemperatureControl	= true;
-	fishConfig.setPointTemperature		= 28;
-	fishConfig.upperDeadBandTemperature	= 1;
-	fishConfig.lowerDeadBandTemperature = 1;
+	fishConfig.upperTemperature			= 28.8;
+	fishConfig.lowerTemperature 		= 27.2;
 	fishConfig.relayStatus				= false;
 	fishConfig.leds						= true;
+	fishStatus.tOn						= 0;
 
     setFishConfig(fishConfig);
 }
@@ -94,6 +109,11 @@ void c_fish::loadDefaultConfig()
 s_fishStatus c_fish::getFishStatus()
 {
 	return fishStatus;
+}
+
+s_fishConfig c_fish::getFishConfig()
+{
+	return fishConfig;
 }
 
 float c_fish::getTemperature()
@@ -118,11 +138,8 @@ void c_fish::setFishConfig(s_fishConfig &fishConfig)
     Serial.println("\n=== SET FISH CONFIG ===");
 
     this->fishConfig.sendDataInterval			= fishConfig.sendDataInterval;
-	this->fishConfig.autoTemperatureControl	    = fishConfig.autoTemperatureControl;
-	this->fishConfig.setPointTemperature		= fishConfig.setPointTemperature;
-	this->fishConfig.upperDeadBandTemperature	= fishConfig.upperDeadBandTemperature;
-	this->fishConfig.lowerDeadBandTemperature   = fishConfig.lowerDeadBandTemperature;
-	this->fishConfig.relayStatus				= fishConfig.relayStatus;
+	this->fishConfig.upperTemperature			= fishConfig.upperTemperature;
+	this->fishConfig.lowerTemperature   		= fishConfig.lowerTemperature;
 	this->fishConfig.leds						= fishConfig.leds;
 
     printFishConfig();
@@ -134,12 +151,12 @@ void c_fish::getFishConfig(s_fishConfig &fishConfig)
 
     fishConfig.sendDataInterval			    = this->fishConfig.sendDataInterval;
 	fishConfig.autoTemperatureControl	    = this->fishConfig.autoTemperatureControl;
-	fishConfig.setPointTemperature		    = this->fishConfig.setPointTemperature;
-	fishConfig.upperDeadBandTemperature	    = this->fishConfig.upperDeadBandTemperature;
-	fishConfig.lowerDeadBandTemperature     = this->fishConfig.lowerDeadBandTemperature;
+	fishConfig.upperTemperature	   			= this->fishConfig.upperTemperature;
+	fishConfig.lowerTemperature     		= this->fishConfig.lowerTemperature;
 	fishConfig.relayStatus				    = this->fishConfig.relayStatus;
 	fishConfig.leds						    = this->fishConfig.leds;
 }
+
 
 void c_fish::printFishConfig()
 {
@@ -147,9 +164,8 @@ void c_fish::printFishConfig()
     Serial.printf("\n Fish Config: \n\r");
     Serial.printf("\t\t sendDataInterval: %d\n\r",               fishConfig.sendDataInterval);
     Serial.printf("\t\t autoTemperatureControl: %d\n\r",         fishConfig.autoTemperatureControl);
-    Serial.printf("\t\t setPointTemperature: %d\n\r",            fishConfig.setPointTemperature);
-    Serial.printf("\t\t upperDeadBandTemperature: %f\n\r",       fishConfig.upperDeadBandTemperature);
-    Serial.printf("\t\t lowerDeadBandTemperature: %f\n\r",       fishConfig.lowerDeadBandTemperature);
+    Serial.printf("\t\t upperTemperature: %f\n\r",       		 fishConfig.upperTemperature);
+    Serial.printf("\t\t lowerTemperature: %f\n\r",      		 fishConfig.lowerTemperature);
     Serial.printf("\t\t relayStatus: %d\n\r",                    fishConfig.relayStatus);
     Serial.printf("\t\t leds: %d\n\r",                           fishConfig.leds);
 }

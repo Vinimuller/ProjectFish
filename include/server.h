@@ -5,6 +5,8 @@
 
 #include <SmingCore.h>
 #include <AppSettings.h>
+#include <fish.h>
+#include <dataHandler.h>
 
 
 class c_localServer{

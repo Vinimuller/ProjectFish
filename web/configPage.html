@@ -1,0 +1,28 @@
+<head>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">  
+        <form id="contact" action="/onSetConfig" method="post">
+        <h3>Welcome to Fish Peaks</h3>
+        <h4>Change my settings</h4>
+        <fieldset>
+            <input name="upperTemp" placeholder="Upper Temp" type="number" step="0.1" required>
+        </fieldset>
+        <fieldset>
+            <input name="lowerTemp" placeholder="Lower Temp" type="number" step="0.1" required>
+        </fieldset>
+        <fieldset>
+            <input name="leds" placeholder="Leds" type="number" required>
+        </fieldset>
+        <fieldset>
+            <input name="dataInterval" placeholder="Send Data Interval" type="number" step="0.1" required>
+        </fieldset>
+        <fieldset>
+            <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+        </fieldset>
+        <p class="copyright">Designed by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
+        </form>
+    </div>
+</body>

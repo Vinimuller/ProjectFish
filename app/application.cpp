@@ -61,7 +61,7 @@ void ready()
 	WifiAccessPoint.setIP(IPAddress(192,168,45,1));
 
 	WifiStation.enable(true);
-	WifiStation.config("raks", "13092017");
+	WifiStation.config("VOLNEI", "3810125801");
 
 	//load Settings
 	if(AppSettings.exist()) 

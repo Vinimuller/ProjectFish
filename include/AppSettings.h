@@ -39,9 +39,8 @@ struct ApplicationSettingsStorage
 			password 			= network["password"].asString();
 
 			JsonObject& fish = root["fish"];
-			fishConfig.setPointTemperature 		= fish["setPointTemperature"];
-			fishConfig.upperDeadBandTemperature = fish["upperDeadBandTemperature"];
-			fishConfig.lowerDeadBandTemperature = fish["lowerDeadBandTemperature"];
+			fishConfig.upperTemperature = fish["upperTemperature"];
+			fishConfig.lowerTemperature = fish["lowerTemperature"];
 			fishConfig.autoTemperatureControl 	= fish["autoTemperatureControl"];
 			fishConfig.relayStatus				= fish["relayStatus"];
 			fishConfig.leds 					= fish["leds"];
@@ -63,9 +62,8 @@ struct ApplicationSettingsStorage
 
 		JsonObject& fish = jsonBuffer.createObject();
 		root["fish"] 					 = fish;
-		fish["setPointTemperature"] 	 = fishConfig.setPointTemperature;
-		fish["upperDeadBandTemperature"] = fishConfig.upperDeadBandTemperature;
-		fish["lowerDeadBandTemperature"] = fishConfig.lowerDeadBandTemperature;
+		fish["upperTemperature"] = fishConfig.upperTemperature;
+		fish["lowerTemperature"] = fishConfig.lowerTemperature;
 		fish["autoTemperatureControl"] 	 = fishConfig.autoTemperatureControl;
 		fish["relayStatus"] 			 = fishConfig.relayStatus;
 		fish["leds"] 					 = fishConfig.leds;

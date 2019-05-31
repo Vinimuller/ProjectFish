@@ -2,9 +2,14 @@
 
 #include <server.h>
 
+extern c_fish *fish;
+extern c_dataHandler *dataHandler;
+
 void onIndex(HttpRequest& request, HttpResponse& response);
 void onFile(HttpRequest& request, HttpResponse& response);
 void onChangeWifi(HttpRequest& request, HttpResponse& response);
+void onConfig(HttpRequest& request, HttpResponse& response);
+void onSetConfig(HttpRequest& request, HttpResponse& response);
 
 c_localServer::c_localServer()
 {
@@ -13,6 +18,8 @@ c_localServer::c_localServer()
     server.listen(80);
 	server.addPath("/", onIndex);
     server.addPath("/changeWifi", onChangeWifi);
+    server.addPath("/config",     onConfig);
+    server.addPath("/onSetConfig",onSetConfig);
 	server.setDefaultHandler(onFile);
 }
 
@@ -35,6 +42,33 @@ void onChangeWifi(HttpRequest& request, HttpResponse& response)
     WifiStation.connect();
 
     response.sendFile("message.html");
+}
+
+void onSetConfig(HttpRequest& request, HttpResponse& response)
+{
+    Serial.println("\n=== ON SET CONFIG  ===");
+    
+    s_fishConfig fishConfig;
+
+    fishConfig.upperTemperature     = request.getPostParameter("upperTemp").toFloat();
+    fishConfig.lowerTemperature     = request.getPostParameter("lowerTemp").toFloat();
+    fishConfig.leds                         = request.getPostParameter("leds").toInt();
+    fishConfig.sendDataInterval             = request.getPostParameter("dataInterval").toInt();
+    
+    Serial.printf("Rx info upper: %d lower:%d leds:%d interval: %d\n",fishConfig.upperTemperature,
+    fishConfig.lowerTemperature,fishConfig.leds,fishConfig.sendDataInterval);
+
+    fish->setFishConfig(fishConfig);
+    dataHandler->setSendInterval(fishConfig.sendDataInterval * 1000);
+
+    response.sendFile("message.html");
+}
+
+void onConfig(HttpRequest& request, HttpResponse& response)
+{
+    Serial.println("\n=== ON CONFIG ===");
+    response.setCache(86400, true); // It's important to use cache for better performance.
+	response.sendFile("configPage.html"); // will be automatically deleted
 }
 
 void onIndex(HttpRequest& request, HttpResponse& response)
